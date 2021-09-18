@@ -53,16 +53,23 @@ public class Main {
             JSONObject objJSON = (JSONObject) obj;
             String url = (String)objJSON.get("url");
 
+            if (url.endsWith(".jpg")) {
+                int position = url.lastIndexOf("/");
+                String name = url.substring(position + 1);
+                BufferedImage img = ImageIO.read(new URL(url));
+                File outputfile = new File(name);
+                ImageIO.write(img, "jpg", outputfile);
+            }else {
+                int position = url.lastIndexOf("/");
+                int position2 = url.lastIndexOf("?");
+                String name = url.substring(position + 1, position2);
+                //System.out.println(name);
 
-            int position = url.lastIndexOf("/");
-            int position2 = url.lastIndexOf("?");
-            String name = url.substring(position + 1, position2);
-            System.out.println(name);
-
-            String url2 = String.format("https://img.youtube.com/vi/%s/maxresdefault.jpg", name);
-            BufferedImage img = ImageIO.read(new URL(url2));
-            File outputfile = new File(name + ".jpg");
-            ImageIO.write(img, "jpg", outputfile);
+                String url2 = String.format("https://img.youtube.com/vi/%s/maxresdefault.jpg", name);
+                BufferedImage img = ImageIO.read(new URL(url2));
+                File outputfile = new File(name + ".jpg");
+                ImageIO.write(img, "jpg", outputfile);
+            }
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
